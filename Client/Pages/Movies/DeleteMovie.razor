@@ -1,0 +1,36 @@
+
+@inject IServiceMovie SMovie
+@page "/movies/delete/{ID:int}"
+@page "/movies/delete/{ID:int}/{Name}"
+@using peliculas.Client.Pages.Components
+
+<h6>Ver informacion de una pelicula en especifico</h6>
+<div> Nombre de la pelicula: <b>@Name</b></div>
+<div> Id de la pelicula: <b>@ID</b></div> 
+<MovieComponent MovieSel = "movieSelected" DeleteMovie1 = "@UpdatemovieSelected"></MovieComponent>
+@code {
+    [Parameter] public int ID {get;set;}
+    [Parameter] public string Name {get;set;}
+    public List<Movie> Movies {get;set;}
+    public Movie movieSelected {get;set;}
+
+    protected override void OnInitialized(){
+        Console.WriteLine($"El id de la categoria es {ID} y el nombre {Name}");
+        Movies=SMovie.GetMovies();
+        foreach (var item in Movies)
+        {
+            if(item.Id==(ID)){
+                movieSelected= item;
+                
+            }
+        }
+        
+        ID=Movies.IndexOf(movieSelected);
+    }
+     private Task UpdatemovieSelected()
+    {
+        return Task.CompletedTask;
+    }
+   
+
+}

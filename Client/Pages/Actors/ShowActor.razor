@@ -1,0 +1,16 @@
+@page "/actors"
+@using peliculas.Client.Pages.Components
+@inject IServiceActor actor
+
+<div class="form-group">
+    <a href="actors/create" class="btn btn-info">Crear Actor</a>
+</div>
+<CardActorsComponent Actors = "Actors"></CardActorsComponent>
+@code {
+    private List<Actor> Actors;
+    protected override void OnInitialized()
+    {
+        Actors = actor.GetActors();
+    }
+
+}

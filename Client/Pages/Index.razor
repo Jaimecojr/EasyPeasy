@@ -1,0 +1,58 @@
+﻿@page "/"
+@using peliculas.Client.Pages.Components
+@inject IServiceMovie Smovie
+@* @inject IServiceCategory SCategory *@
+
+<div class="form-group">
+    <a href="movies/create" class="btn btn-info">Crear Nueva Pelicula</a>
+</div>
+<div class="jumbotron">
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-group mb-2">
+                    <label for="movie_name" class="sr-only">Nombre pelicula</label>
+                    <input type="text" @bind-value="movie_name" @bind-value:event="oninput"
+                        @onkeypress="@((KeyboardEventArgs e)=>MovieNameKeyPress(e))" class="form-control"
+                        id="movie_name" placeholder="Buscar pelicula" />
+                </div>
+            </div>
+    </div>
+    <button type="button" class="btn btn-primary mb-2 btn-sm" @onclick="CargarNuevasPeliculas">
+        Buscar
+    </button>
+
+    <button type="button" class="btn btn-secondary mb-2 btn-sm" @onclick="LimpiarCampos">
+        Limpiar campos
+    </button>
+</div>
+
+<CardMovieComponent Movies = "Movies2"></CardMovieComponent>
+@code {
+    private List<Movie> Movies2;
+
+    protected override void OnInitialized()
+    {
+        Movies2 = Smovie.GetMovies();
+    }
+    string movie_name = "";
+    
+    private void MovieNameKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            CargarNuevasPeliculas();
+        }
+    }
+  private void CargarNuevasPeliculas()
+    {
+        Movies2 = Smovie.GetMovies().Where(x => x.Name.ToLower().Contains(movie_name.ToLower())).ToList();
+        Console.WriteLine($"Nombre pelicula: {movie_name}");
+    }
+
+    private void LimpiarCampos()
+    {
+        Movies2 = Smovie.GetMovies();
+        movie_name = "";
+    }
+
+}

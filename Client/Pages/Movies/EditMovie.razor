@@ -1,0 +1,61 @@
+@page "/movies/edit/{Id:int}"
+@using peliculas.Client.Pages.Components
+@inject NavigationManager navigationManager
+@inject IServiceMovie Smovie
+
+<FormMovie Movie="movie4" OnValidSubmit="Edit" CategoriasNoSeleccionadas="CategoriasNoSeleccionadas" CategoriasSeleccionadas="CategoriasSeleccionadas"></FormMovie>
+@code {
+    [Parameter] public int Id { get; set; }
+    private List<Movie> Movie1;
+        private Movie movie4;
+        private int IdRecup;
+    private List<Category> CategoriasNoSeleccionadas = new List<Category>();
+    private List<Category> CategoriasSeleccionadas = new List<Category>();
+    protected override void OnInitialized()
+    {
+        Movie1=Smovie.GetMovies();
+        foreach (var item in Movie1)
+        {
+            if(item.Id==(Id)){
+                movie4= item;
+                
+            }
+        }
+        
+        IdRecup=Movie1.IndexOf(movie4);
+        Console.WriteLine($"Id Recuperado: {IdRecup}");
+        /*Movie1 = new Movie()
+        {
+            Name = "El juego del calamar",
+            EnCartelera = true,
+            Sinopsis = "Sinopsis...",
+            Trailer = "Trailer"
+        };
+        */
+        CategoriasNoSeleccionadas = new List<Category>()
+            {
+                new Category(){Id = 1, NameCategory = "Comedia"},
+                new Category(){Id = 2, NameCategory = "Terror"},
+            };
+        CategoriasSeleccionadas = new List<Category>()
+            {
+                new Category(){Id = 3, NameCategory = "Ciencia Ficcion"},
+                new Category(){Id = 4, NameCategory = "Documentales"},
+                new Category(){Id = 5, NameCategory = "Comedia"}
+            };
+    }
+    void Edit()
+    {
+        Console.WriteLine($"Pelicula: {Movie1[IdRecup].Name}");
+        Console.WriteLine($"Premier: {Movie1[IdRecup].Premier}");
+        Console.WriteLine($"Esta en cartelera: {Movie1[IdRecup].EnCartelera}");
+        //Console.WriteLine($"Poster: {Movie1[Id-1].Poster}");
+        
+        Console.WriteLine($"Sinopsis: {Movie1[IdRecup].Sinopsis}");
+
+        Console.WriteLine($"Id Recuperado: {IdRecup}");
+        Smovie.PeliculasGuardadas[IdRecup]=movie4;
+        navigationManager.NavigateTo("/");
+        
+    }
+}

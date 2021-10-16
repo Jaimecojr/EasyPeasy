@@ -1,0 +1,33 @@
+@page "/movies/create"
+@using peliculas.Client.Pages.Components
+@inject IServiceMovie repositorio
+@inject IErrorMessage showMessage
+@inject NavigationManager navigationManager
+
+<FormMovie Movie="Movie" OnValidSubmit="Create" CategoriasNoSeleccionadas="CategoriasNoSeleccionadas"></FormMovie>
+
+@code {
+    private Movie Movie = new Movie();
+    private List<Category> CategoriasNoSeleccionadas = new List<Category>();
+    protected override void OnInitialized()
+    {
+        CategoriasNoSeleccionadas = new List<Category>(){
+            new Category(){Id = 1, NameCategory="Comedia"},
+            new Category(){Id = 2, NameCategory="Terror"},
+            new Category(){Id = 3, NameCategory="Ciencia Ficcion"},
+            new Category(){Id = 4, NameCategory="Drama"}      
+            };
+    }
+    private async Task Create()
+    {
+        var httpResponse = await repositorio.Post("api/movies", Movie);
+        if (httpResponse.Error)
+        {
+            await showMessage.ShowErrorMessage(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("/");
+        }
+    }
+}

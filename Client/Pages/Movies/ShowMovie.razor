@@ -1,0 +1,14 @@
+@page "/movie/{MovieId:int}"
+@page "/movie/{MovieId:int}/{MovieName}"
+@using peliculas.Client.Pages.Components
+@inject IServiceMovie repositorio
+@inject IErrorMessage showMessage
+@inject NavigationManager navigationManager
+
+
+<h6>Ver pelicula</h6>
+
+@code {
+    [Parameter] public int MovieId {get;set;}
+    [Parameter] public string MovieName {get;set;}
+}

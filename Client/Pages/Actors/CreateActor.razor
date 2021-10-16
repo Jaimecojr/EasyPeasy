@@ -1,0 +1,54 @@
+@page "/actors/create"
+@using peliculas.Client.Pages.Components
+@inject IServiceMovie repositorio
+@inject NavigationManager navigationManager
+@inject IErrorMessage mostrarMensaje
+
+<h3>Crear Actores</h3>
+<FormActors OnValidSubmit="Create" Actor="Actor" />
+
+@code {
+    private Actor Actor = new Actor();
+
+    private async Task Create()
+    {
+        var httpResponse = await repositorio.Post("api/actors", Actor);
+        if (httpResponse.Error)
+        {
+           await mostrarMensaje.ShowErrorMessage(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("/actors");
+        }
+    }
+}
+
+
+@* @page "/actors/create"
+@using peliculas.Client.Pages.Components
+@inject IServiceMovie repositorio
+@inject NavigationManager navigationManager
+@inject IErrorMessage mostrarMensajes
+
+<h2 aling="center">Crear Actor</h2>
+
+
+<FormActors OnValidSubmit= "Create" Actor= "Actor"></FormActors>
+
+@code{
+    private Actor Actor = new Actor();
+
+    private async Task Create()
+    {
+        var httpResponse = await repositorio.Post("api/actors", Actor);
+        if (httpResponse.Error)
+        {
+            await mostrarMensajes.ShowErrorMessage(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("/");
+        }
+    }
+} *@
